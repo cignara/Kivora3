@@ -1,4 +1,4 @@
-# Kivora Learning — KivoraV2
+# Kivora Learning — KivoraV3
 
 A child-safe, gamified, adaptive learning platform for children aged 2–11.
 
