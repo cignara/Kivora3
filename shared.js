@@ -39,7 +39,7 @@
   <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px">
     <a href="./index.html" style="display:flex;align-items:center;gap:8px;text-decoration:none">
       <div style="width:40px;height:40px;background:linear-gradient(135deg,#7C3AED,#FF4E8B);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem" class="animate-wiggle">🦊</div>
-      <span style="font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;background:linear-gradient(to right,#7C3AED,#FF4E8B);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Kivora</span>
+      <span style="font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;background:linear-gradient(to right,#7C3AED,#FF4E8B);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Kivora Learning</span>
     </a>
     <nav id="desktopNav" style="display:none;align-items:center;gap:4px">
       ${NAV_LINKS.map(l => `<a href="${l.href}" style="padding:8px 14px;border-radius:10px;font-weight:700;font-size:.9rem;color:#475569;text-decoration:none;transition:all .2s" onmouseover="this.style.background='#7C3AED22';this.style.color='#7C3AED'" onmouseout="this.style.background='';this.style.color='#475569'">${l.label}</a>`).join('')}
@@ -70,7 +70,7 @@
       <div style="grid-column:span 2">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
           <span style="font-size:1.8rem">🦊</span>
-          <span style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;background:linear-gradient(to right,#FFD93D,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Kivora</span>
+          <span style="font-family:'Baloo 2',cursive;font-size:1.4rem;font-weight:800;background:linear-gradient(to right,#FFD93D,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Kivora Learning</span>
         </div>
         <p style="color:#94a3b8;font-size:.85rem;font-weight:600;line-height:1.6;margin-bottom:14px">Where every child discovers the magic of learning! Pre-school to Grade 5 worldwide.</p>
         <div style="display:flex;gap:8px">
@@ -124,7 +124,7 @@
       </div>
     </div>
     <div style="border-top:1px solid #1e293b;padding-top:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
-      <div style="color:#64748b;font-size:.82rem;font-weight:600">© 2026 Kivora. All rights reserved. Made with ❤️ for every child on earth. 🌍 Worldwide · English</div>
+      <div style="color:#64748b;font-size:.82rem;font-weight:600">© 2026 Kivora Learning. All rights reserved. Made with ❤️ for every child on earth. 🌍 Worldwide · English</div>
       <div style="display:flex;flex-wrap:wrap;gap:8px">
         <span style="background:#1e293b;border-radius:999px;padding:4px 10px;font-size:.72rem;font-weight:700;color:#94a3b8">🔒 COPPA Safe</span>
         <span style="background:#1e293b;border-radius:999px;padding:4px 10px;font-size:.72rem;font-weight:700;color:#94a3b8">🛡️ GDPR-K Safe</span>
