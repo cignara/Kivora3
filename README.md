@@ -3,7 +3,7 @@
 A child-safe, gamified, adaptive learning platform for children aged 2–11.
 
 ## Live Site
-https://cignara.github.io/KivoraV2/
+https://cignara.github.io/KivoraV3/
 
 ## File Map
 

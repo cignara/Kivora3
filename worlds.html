@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>All 9 Worlds — Kivora Learning</title>
+<meta name="description" content="Explore 9 magical learning worlds for children aged 2–11. Alphabet Island, Math Mountain, Story Cove and more!">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+<style>.bg-white{background-color:#fff}
+.text-slate-700{color:#334155}
+.scroll-smooth{scroll-behavior:smooth}
+
+*{font-family:'Nunito',sans-serif}
+h1,h2,h3,h4,.font-display{font-family:'Baloo 2',cursive}
+.card-lift{transition:transform .25s,box-shadow .25s}
+.card-lift:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,.18)}
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .55s ease,transform .55s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:#7C3AED;border-radius:4px}
+.blob{border-radius:30% 70% 70% 30%/30% 30% 70% 70%;animation:blobMove 8s ease-in-out infinite alternate}
+@keyframes blobMove{0%{border-radius:30% 70% 70% 30%/30% 30% 70% 70%}50%{border-radius:70% 30% 30% 70%/70% 70% 30% 30%}100%{border-radius:50% 50% 30% 70%/50% 30% 70% 50%}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.animate-float{animation:float 3s ease-in-out infinite}
+@keyframes wiggle{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.animate-wiggle{animation:wiggle 1s ease-in-out infinite}
+.hero-bg-light{background:linear-gradient(160deg,#e0f7fa 0%,#fff9c4 40%,#fce4ec 80%,#e8eaf6 100%)}
+.filter-pill{padding:8px 18px;border-radius:999px;border:2px solid #e2e8f0;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;background:#fff}
+.filter-pill.active,.filter-pill:hover{background:#7C3AED;color:#fff;border-color:#7C3AED}
+.content-card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.07);transition:transform .25s,box-shadow .25s}
+.content-card:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.14)}
+.section-badge{display:inline-block;padding:6px 16px;border-radius:999px;font-size:.8rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+.tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.74rem;font-weight:700;background:#f1f5f9;color:#64748b}
+table.comp th,table.comp td{padding:14px 18px;text-align:left;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+table.comp th{font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;background:#f8fafc}
+.prose h2{font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:#1e293b;margin:2rem 0 .75rem}
+.prose h3{font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:700;color:#334155;margin:1.5rem 0 .5rem}
+.prose p,.prose li{line-height:1.75;color:#475569;margin-bottom:.75rem}
+.prose ul{list-style:disc;padding-left:1.4rem}
+.prose a{color:#7C3AED;text-decoration:underline}
+</style>
+</head>
+<body class="bg-white text-slate-700">
+<div id="nav-root"></div>
+<section style="background:linear-gradient(160deg,#e0f7fa,#fce4ec);padding:80px 0 60px;text-align:center">
+  <div style="max-width:48rem;margin:0 auto;padding:0 1.5rem">
+    <div class="section-badge" style="background:linear-gradient(135deg,#7C3AED,#FF4E8B);color:#fff">9 Magical Worlds</div>
+    <h1 style="font-family:'Baloo 2',cursive;font-size:3rem;font-weight:800;color:#1e293b;line-height:1.15;margin:0 0 16px">Explore Every World <span style="background:linear-gradient(to right,#7C3AED,#FF4E8B);-webkit-background-clip:text;-webkit-text-fill-color:transparent">with Kivi!</span></h1>
+    <p style="color:#475569;font-size:1.1rem;font-weight:600;line-height:1.7;margin:0 0 24px">840 activities across 9 magical worlds — each one covering a core curriculum subject and designed for children aged 2–11.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+      <span style="background:#fff;border-radius:999px;padding:8px 18px;font-weight:700;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.08)">⭐ 840 Activities</span>
+      <span style="background:#fff;border-radius:999px;padding:8px 18px;font-weight:700;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.08)">🌍 Ages 2–11</span>
+      <span style="background:#fff;border-radius:999px;padding:8px 18px;font-weight:700;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.08)">📚 9 Subjects</span>
+      <span style="background:#fff;border-radius:999px;padding:8px 18px;font-weight:700;font-size:.88rem;box-shadow:0 2px 8px rgba(0,0,0,.08)">🎯 Adaptive Difficulty</span>
+    </div>
+  </div>
+</section>
+<section style="padding:64px 0;background:#f8fafc">
+  <div style="max-width:80rem;margin:0 auto;padding:0 1.5rem">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px">
+      
+<div id="alphabet-island" class="content-card card-lift reveal" style="animation-delay:0.00s">
+  <div style="background:linear-gradient(135deg,#4A90E2,#5BBCFF);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🏝️</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Alphabet Island</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 2–5</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">110 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Letters, phonics & early reading. Kivi guides little learners through the alphabet jungle!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#4A90E2,#5BBCFF);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="math-mountain" class="content-card card-lift reveal" style="animation-delay:0.08s">
+  <div style="background:linear-gradient(135deg,#27AE60,#52D68A);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">⛰️</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Math Mountain</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 3–8</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">130 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Counting, numbers, shapes & early arithmetic. Climb to the top with every solved problem!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#27AE60,#52D68A);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="story-cove" class="content-card card-lift reveal" style="animation-delay:0.16s">
+  <div style="background:linear-gradient(135deg,#8E44AD,#C39BD3);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🌊</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Story Cove</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 3–9</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">80 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Interactive tales, comprehension & creative writing adventures by the magical cove.</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#8E44AD,#C39BD3);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="creativity-kingdom" class="content-card card-lift reveal" style="animation-delay:0.24s">
+  <div style="background:linear-gradient(135deg,#E91E63,#FF6090);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🎨</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Creativity Kingdom</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 2–11</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">65 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Art projects, colouring, music & crafts. Every child is an artist in the kingdom!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#E91E63,#FF6090);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="science-safari" class="content-card card-lift reveal" style="animation-delay:0.32s">
+  <div style="background:linear-gradient(135deg,#16A085,#45D6B5);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🔬</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Science Safari</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 4–10</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">120 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Nature, experiments & the world of science. Go on safari with Kivi the curious fox!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#16A085,#45D6B5);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="life-skills-village" class="content-card card-lift reveal" style="animation-delay:0.40s">
+  <div style="background:linear-gradient(135deg,#F39C12,#F7C06A);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🏘️</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Life Skills Village</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 3–10</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">90 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Emotions, health, safety & social skills. Real-life lessons for growing up happy & kind.</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#F39C12,#F7C06A);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="coding-city" class="content-card card-lift reveal" style="animation-delay:0.48s">
+  <div style="background:linear-gradient(135deg,#2980B9,#5DADE2);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">💻</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Coding City</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 5–11</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">100 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Logic, algorithms & early programming concepts. Build the future one block at a time!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#2980B9,#5DADE2);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="music-meadow" class="content-card card-lift reveal" style="animation-delay:0.56s">
+  <div style="background:linear-gradient(135deg,#9B59B6,#BB8FCE);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🎵</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Music Meadow</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 2–9</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">80 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Rhythm, singing, instruments & musical theory. Dance through the meadow with Kivi!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#9B59B6,#BB8FCE);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+
+<div id="brain-game-galaxy" class="content-card card-lift reveal" style="animation-delay:0.64s">
+  <div style="background:linear-gradient(135deg,#6C3483,#A569BD);padding:36px 24px;text-align:center;position:relative">
+    <div style="font-size:3.5rem;margin-bottom:8px">🧠</div>
+    <h3 style="font-family:'Baloo 2',cursive;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 4px">Brain Game Galaxy</h3>
+    <span style="background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:3px 12px;font-size:.75rem;font-weight:700">Ages 4–11</span>
+    <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:700">65 activities</div>
+  </div>
+  <div style="padding:20px 24px 24px">
+    <p style="color:#64748b;font-size:.88rem;line-height:1.6;margin:0 0 16px">Memory games, puzzles & critical thinking. Blast off into the galaxy of clever minds!</p>
+    <a href="./kivora-activity-player.html" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#6C3483,#A569BD);border-radius:12px;color:#fff;font-weight:800;font-size:.88rem;text-decoration:none;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Explore World →</a>
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+<section style="background:linear-gradient(135deg,#7C3AED,#4F46E5);padding:80px 0;text-align:center">
+  <h2 style="font-family:'Baloo 2',cursive;font-size:2.4rem;font-weight:800;color:#fff;margin:0 0 16px">Ready to Start the Adventure?</h2>
+  <p style="color:rgba(255,255,255,.85);font-size:1.05rem;font-weight:600;margin:0 0 28px">Join thousands of families exploring Kivora's magical worlds — free forever!</p>
+  <a href="./index.html?auth=register" style="display:inline-block;padding:16px 40px;background:#FFD93D;border-radius:16px;font-family:'Baloo 2',cursive;font-size:1.2rem;font-weight:800;color:#7C3AED;text-decoration:none">🚀 Start Free Today!</a>
+</section>
+<div id="footer-root"></div>
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" style="position:fixed;bottom:24px;right:24px;z-index:500;background:linear-gradient(135deg,#7C3AED,#FF4E8B);color:#fff;width:44px;height:44px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 16px rgba(124,58,237,.4)">↑</button>
+<script src="./shared.js"></script></body></html>
