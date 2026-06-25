@@ -1,0 +1,245 @@
+(function() {
+  'use strict';
+  const ns = window.kivoraFirebase = { ready: false };
+
+  const CONFIG = {
+    apiKey: "AIzaSyBXdDDJvdInfdhovdx_Jo3YN_dhY-RY8yo",
+    authDomain: "kivora-learning.firebaseapp.com",
+    projectId: "kivora-learning",
+    storageBucket: "kivora-learning.firebasestorage.app",
+    messagingSenderId: "145485791442",
+    appId: "1:145485791442:web:d0a6f467aecc29101f6d0b",
+    measurementId: "G-DZZ18Z4J87"
+  };
+
+  function isFileProtocol() { return window.location && window.location.protocol === 'file:'; }
+
+  function init() {
+    if (typeof firebase === 'undefined') {
+      console.warn('[Kivora Firebase] SDK not loaded — localStorage fallback');
+      return;
+    }
+    try {
+      if (firebase.apps.length) return;
+      firebase.initializeApp(CONFIG);
+      ns.auth = firebase.auth();
+      ns.db  = firebase.database();
+      ns.ready = true;
+      console.log('[Kivora Firebase] Ready');
+      if (navigator.onLine !== false) syncFromCloud();
+    } catch (e) {
+      console.warn('[Kivora Firebase] Init error:', e.message);
+    }
+  }
+
+  function getUid() { return ns.auth && ns.auth.currentUser && ns.auth.currentUser.uid; }
+
+  ns.signInAnonymously = function() {
+    if (!ns.auth) return Promise.reject('Firebase not available');
+    return ns.auth.signInAnonymously().catch(function(e) {
+      if (e.code === 'auth/operation-not-allowed') {
+        console.warn('[Kivora Firebase] Anonymous auth not enabled in Firebase Console → Authentication → Sign-in method');
+      }
+      throw e;
+    });
+  };
+
+  ns.signInWithGoogle = function() {
+    if (!ns.auth) return Promise.reject(new Error('Firebase not available'));
+    if (isFileProtocol()) {
+      return Promise.reject(new Error('Google sign-in requires a web server. Serve via http:// (e.g. "npx serve" or "npm run build" then upload to GitHub Pages).'));
+    }
+    var provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    return ns.auth.signInWithPopup(provider).then(function(result) {
+      try { localStorage.setItem('kivora_firebase_uid', result.user.uid); } catch(e) {}
+      // Redirect to parent dashboard (or login if no children)
+      var kids = JSON.parse(localStorage.getItem('kivora_children') || '[]');
+      var page = kids.length > 0 ? 'parent-dashboard' : 'login';
+      if (typeof openPage === 'function') { setTimeout(function() { openPage(page); }, 50); }
+      return result;
+    });
+  };
+
+  ns.signInWithEmail = function(email, password) {
+    if (!ns.auth) return Promise.reject('Firebase not available');
+    return ns.auth.signInWithEmailAndPassword(email, password).then(function(result) {
+      try { localStorage.setItem('kivora_firebase_uid', result.user.uid); } catch(e) {}
+      var kids = JSON.parse(localStorage.getItem('kivora_children') || '[]');
+      var page = kids.length > 0 ? 'parent-dashboard' : 'login';
+      if (typeof openPage === 'function') { setTimeout(function() { openPage(page); }, 50); }
+      return result;
+    });
+  };
+
+  ns.createAccount = function(email, password) {
+    if (!ns.auth) return Promise.reject('Firebase not available');
+    return ns.auth.createUserWithEmailAndPassword(email, password).then(function(result) {
+      try { localStorage.setItem('kivora_firebase_uid', result.user.uid); } catch(e) {}
+      if (typeof openPage === 'function') { setTimeout(function() { openPage('login'); }, 50); }
+      return result;
+    });
+  };
+
+  ns.signOut = function() {
+    if (!ns.auth) return Promise.reject('Firebase not available');
+    return ns.auth.signOut();
+  };
+
+  ns.onAuthChanged = function(cb) {
+    if (!ns.auth) { cb(null); return function() {}; }
+    return ns.auth.onAuthStateChanged(cb);
+  };
+
+  function dbRef(path) {
+    return ns.db.ref('users/' + getUid() + '/' + path);
+  }
+
+  ns.saveChildProfile = function(child) {
+    if (!ns.db || !getUid()) return Promise.resolve();
+    return dbRef('children/' + child.id).set(child);
+  };
+
+  ns.loadChildren = function() {
+    if (!ns.db || !getUid()) return Promise.resolve([]);
+    return dbRef('children').once('value').then(function(snap) {
+      var arr = [];
+      snap.forEach(function(d) { arr.push(d.val()); });
+      return arr;
+    });
+  };
+
+  ns.saveProgress = function(childId, code, data) {
+    if (!ns.db || !getUid()) return Promise.resolve();
+    return dbRef('progress/' + childId + '/' + code).set({
+      childId: childId, code: code, ts: data.ts || Date.now(), stars: data.stars || 1
+    });
+  };
+
+  ns.loadProgress = function(childId) {
+    if (!ns.db || !getUid()) return Promise.resolve({});
+    return dbRef('progress/' + childId).once('value').then(function(snap) {
+      var obj = {};
+      snap.forEach(function(d) {
+        var v = d.val();
+        obj[d.key] = { ts: v.ts, stars: v.stars || 1 };
+      });
+      return obj;
+    });
+  };
+
+  ns.getUser = function() { return ns.auth && ns.auth.currentUser; };
+
+  // Listen for auth state → sync to localStorage
+  ns.onAuthChanged(function(user) {
+    if (user) {
+      ns._uid = user.uid;
+      if (!user.isAnonymous) {
+        try { localStorage.setItem('kivora_firebase_uid', user.uid); } catch(e) {}
+      }
+    } else {
+      ns._uid = null;
+    }
+  });
+
+  // Merge cloud data into localStorage on first load
+  function syncFromCloud() {
+    if (!ns.auth) return;
+    var unsub = ns.onAuthChanged(function(user) {
+      if (unsub) unsub();
+      if (!user) return;
+      ns.loadChildren().then(function(cloudKids) {
+        if (!cloudKids.length) return;
+        var local = JSON.parse(localStorage.getItem('kivora_children') || '[]');
+        var merged = local.slice();
+        cloudKids.forEach(function(c) {
+          if (!merged.find(function(x) { return x.id === c.id; })) merged.push(c);
+        });
+        localStorage.setItem('kivora_children', JSON.stringify(merged));
+      });
+      ns.loadProgress('all').then(function() {
+        // Progress is loaded per-child in activities.js
+      });
+    });
+  }
+
+  // Hook into existing auth functions
+  var origStart = window.startLearning;
+  if (origStart) {
+    window.startLearning = function() {
+      origStart();
+      var kids = JSON.parse(localStorage.getItem('kivora_children') || '[]');
+      var active = kids[kids.length - 1];
+      if (active) {
+        ns.signInAnonymously().then(function() {
+          ns.saveChildProfile(active);
+        }).catch(function() {});
+      }
+    };
+  }
+
+  var origLogout = window.kivoraLogout;
+  if (origLogout) {
+    window.kivoraLogout = function() {
+      origLogout();
+      ns.signOut().catch(function() {});
+    };
+  }
+
+  // Lazy-hook progress functions once activities.js loads
+  function hookProgress() {
+    if (typeof saveProgress !== 'function') return false;
+    if (window._fbProgressHooked) return true;
+    window._fbProgressHooked = true;
+
+    var origSave = saveProgress;
+    saveProgress = function(code) {
+      origSave(code);
+      if (ns.ready) {
+        try {
+          var childId = localStorage.getItem('kivora_active_child');
+          if (childId) ns.saveProgress(childId, code, { ts: Date.now(), stars: 1 });
+        } catch(e) {}
+      }
+    };
+
+    var origLoad = loadProgress;
+    loadProgress = function() {
+      origLoad();
+      if (!ns.ready) return;
+      try {
+        var childId = localStorage.getItem('kivora_active_child');
+        if (!childId) return;
+        ns.loadProgress(childId).then(function(cloudData) {
+          if (!cloudData || !Object.keys(cloudData).length) return;
+          Object.keys(cloudData).forEach(function(code) {
+            if (!window._kivoraCompleted.has(code)) {
+              window._kivoraCompleted.add(code);
+              var a = (window.ACTS || []).find(function(x) { return x.code === code; });
+              if (a) { window.totalXP = (window.totalXP || 0) + a.xp; window.totalCoins = (window.totalCoins || 0) + a.coins; }
+            }
+          });
+          // Save merged progress back to localStorage
+          var key = (function() {
+            try {
+              var id = localStorage.getItem('kivora_active_child');
+              return id ? 'kivora_progress_' + id : 'kivora_progress';
+            } catch(e) { return 'kivora_progress'; }
+          })();
+          var merged = {};
+          window._kivoraCompleted.forEach(function(c) { merged[c] = { ts: Date.now(), stars: 1 }; });
+          try { localStorage.setItem(key, JSON.stringify(merged)); } catch(e) {}
+        });
+      } catch(e) {}
+    };
+    return true;
+  }
+
+  // Poll until activities.js defines these functions
+  (function poll() {
+    if (hookProgress()) return;
+    setTimeout(poll, 300);
+  })();
+
+  init();
+})();

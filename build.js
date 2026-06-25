@@ -44,95 +44,89 @@ function findBlocks(content, openTag) {
    DEV MODE: Extract inline assets from all HTML files
    ═══════════════════════════════════════════ */
 if (isDev) {
-  // Step 1: Extract all CSS from ALL HTML files into style.css
-  console.log('\n\x1b[33m1/4\x1b[0m Extracting inline CSS from all HTML files...');
   const allHtmlFiles = fs.readdirSync(ROOT).filter(f => f.endsWith('.html') && !f.startsWith('_'));
-  let allCss = '';
+  const idxHtml = read('index.html');
+  const hasInlineStyles = findBlocks(idxHtml, 'style').length > 0;
 
-  for (const file of allHtmlFiles) {
-    const content = read(file);
-    const styleBlocks = findBlocks(content, 'style');
-    for (const block of styleBlocks) {
-      const css = content.slice(block.contentStart, block.contentEnd).trim();
-      if (css) {
-        allCss += (allCss ? '\n\n' : '') + css;
-        console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m %s \u2192 style.css (%d bytes)', file, css.length);
+  if (!hasInlineStyles) {
+    console.log('  \x1b[33m\xe2\x86\x92 index.html already uses external assets; skipping extraction\x1b[0m');
+  } else {
+    // Step 1: Extract all CSS from ALL HTML files into style.css
+    console.log('\n\x1b[33m1/4\x1b[0m Extracting inline CSS from all HTML files...');
+    let allCss = '';
+
+    for (const file of allHtmlFiles) {
+      const content = read(file);
+      const styleBlocks = findBlocks(content, 'style');
+      for (const block of styleBlocks) {
+        const css = content.slice(block.contentStart, block.contentEnd).trim();
+        if (css) {
+          allCss += (allCss ? '\n\n' : '') + css;
+          console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m %s \u2192 style.css (%d bytes)', file, css.length);
+        }
       }
     }
-  }
 
-  write('assets/style.css', allCss);
-  console.log('  \x1b[32m\xe2\x9c\x93\x1b[0m Combined CSS \u2192 assets/style.css (%d bytes total)', allCss.length);
+    write('assets/style.css', allCss);
+    console.log('  \x1b[32m\xe2\x9c\x93\x1b[0m Combined CSS \u2192 assets/style.css (%d bytes total)', allCss.length);
 
-  // Step 2: Extract scripts from index.html
-  console.log('\n\x1b[33m2/4\x1b[0m Extracting inline scripts from index.html...');
-  const idxHtml = read('index.html');
-  const scriptBlocks = findBlocks(idxHtml, 'script');
-  const styleBlocks = findBlocks(idxHtml, 'style');
-  const lastStyleEnd = styleBlocks.length > 0 ? styleBlocks[styleBlocks.length - 1].end : 0;
-  const postStyleScripts = scriptBlocks.filter(b => b.start > lastStyleEnd);
-  if (postStyleScripts.length === 0) { console.error('No <script> blocks found!'); process.exit(1); }
+    // Step 2: Extract inline scripts (no `src` attr) from index.html
+    console.log('\n\x1b[33m2/4\x1b[0m Extracting inline scripts from index.html...');
+    const scriptBlocks = findBlocks(idxHtml, 'script');
+    const styleBlocks = findBlocks(idxHtml, 'style');
+    const inlineScripts = scriptBlocks.filter(function(b) { return !/ src\s*=/.test(b.tagContent); });
+    if (inlineScripts.length === 0) { console.error('No inline <script> blocks found!'); process.exit(1); }
 
-  const script1 = postStyleScripts[0];
-  const script1Content = idxHtml.slice(script1.contentStart, script1.contentEnd);
-  write('assets/app.js', `// Kivora SPA \u2014 Data + Application Logic\n${script1Content}`);
-  console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m Extracted SPA JS  \u2192 assets/app.js (%d bytes)', script1Content.length);
+    const script1 = inlineScripts[0];
+    const script1Content = idxHtml.slice(script1.contentStart, script1.contentEnd);
+    write('assets/app.js', '// Kivora SPA \u2014 Data + Application Logic\n' + script1Content);
+    console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m Extracted SPA JS  \u2192 assets/app.js (%d bytes)', script1Content.length);
 
-  if (postStyleScripts.length > 1) {
-    const script2 = postStyleScripts[1];
-    const script2Content = idxHtml.slice(script2.contentStart, script2.contentEnd);
-    write('assets/activities.js', `// Kivora Activity Player \u2014 Data + Engine\n${script2Content}`);
-    console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m Extracted Activity JS \u2192 assets/activities.js (%d bytes)', script2Content.length);
-  }
-
-  // Step 3: Rewrite index.html
-  console.log('\n\x1b[33m3/4\x1b[0m Rewriting index.html...');
-  const firstStyle = styleBlocks[0];
-  const parts = [
-    idxHtml.slice(0, firstStyle.start),
-    `<link rel="stylesheet" href="assets/style.css" />\n`,
-    idxHtml.slice(firstStyle.end, script1.start),
-    '<script src="assets/app.js"></script>\n',
-  ];
-  if (postStyleScripts.length > 1) {
-    const script2 = postStyleScripts[1];
-    parts.push(idxHtml.slice(script1.end, script2.start));
-    parts.push('<script src="assets/activities.js"></script>\n');
-    parts.push(idxHtml.slice(script2.end));
-  } else {
-    parts.push(idxHtml.slice(script1.end));
-  }
-  write('index.html', parts.join(''));
-  console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m index.html uses external assets');
-
-  // Step 4: Process other HTML files — remove inline <style> and <script>, add CSS link
-  console.log('\n\x1b[33m4/4\x1b[0m Processing other HTML files...');
-  const otherHtml = allHtmlFiles.filter(f => f !== 'index.html');
-  for (const file of otherHtml) {
-    let content = read(file);
-    const origLen = content.length;
-
-    // Remove inline <style> blocks (CSS already extracted to style.css)
-    content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '');
-
-    // Remove inline <script> blocks (without src=)
-    content = content.replace(/<script>[\s\S]*?<\/script>/g, '');
-
-    // Collapse excessive blank lines
-    content = content.replace(/\n{3,}/g, '\n\n');
-
-    // Add external CSS link if missing
-    if (!content.includes('assets/style.css') && content.includes('</head>')) {
-      content = content.replace('</head>', '  <link rel="stylesheet" href="assets/style.css" />\n</head>');
+    if (inlineScripts.length > 1) {
+      const script2 = inlineScripts[1];
+      const script2Content = idxHtml.slice(script2.contentStart, script2.contentEnd);
+      write('assets/activities.js', '// Kivora Activity Player \u2014 Data + Engine\n' + script2Content);
+      console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m Extracted Activity JS \u2192 assets/activities.js (%d bytes)', script2Content.length);
     }
 
-    // Add activities.js for activity player
-    if (file === 'kivora-activity-player.html' && !content.includes('assets/activities.js')) {
-      content = content.replace('</body>', '  <script src="assets/activities.js"></script>\n</body>');
+    // Step 3: Rewrite index.html
+    console.log('\n\x1b[33m3/4\x1b[0m Rewriting index.html...');
+    const firstStyle = styleBlocks[0];
+    const parts = [
+      idxHtml.slice(0, firstStyle.start),
+      '<link rel="stylesheet" href="assets/style.css" />\n',
+      idxHtml.slice(firstStyle.end, script1.start),
+      '<script src="assets/app.js"></script>\n',
+    ];
+    if (inlineScripts.length > 1) {
+      const script2 = inlineScripts[1];
+      parts.push(idxHtml.slice(script1.end, script2.start));
+      parts.push('<script src="assets/activities.js"></script>\n');
+      parts.push(idxHtml.slice(script2.end));
+    } else {
+      parts.push(idxHtml.slice(script1.end));
     }
+    write('index.html', parts.join(''));
+    console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m index.html uses external assets');
 
-    write(file, content);
-    console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m %s \u2014 cleaned (%d bytes saved)', file, origLen - content.length);
+    // Step 4: Process other HTML files
+    console.log('\n\x1b[33m4/4\x1b[0m Processing other HTML files...');
+    const otherHtml = allHtmlFiles.filter(function(f) { return f !== 'index.html'; });
+    for (const file of otherHtml) {
+      let content = read(file);
+      const origLen = content.length;
+
+      content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '');
+      if (content.indexOf('assets/style.css') === -1 && content.indexOf('</head>') !== -1) {
+        content = content.replace('</head>', '  <link rel="stylesheet" href="assets/style.css" />\n</head>');
+      }
+      if (file === 'kivora-activity-player.html' && content.indexOf('assets/activities.js') === -1) {
+        content = content.replace('</body>', '  <script src="assets/activities.js"></script>\n</body>');
+      }
+
+      write(file, content);
+      console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m %s \u2014 cleaned (%d bytes saved)', file, origLen - content.length);
+    }
   }
 
   console.log('\n\x1b[36m Dev mode complete. Source files now use external assets.\x1b[0m');
@@ -190,6 +184,9 @@ if (isDev) {
       fs.writeFileSync(path.join(DIST_DIR, 'shared.js'), r.code);
       console.log('  \x1b[32m\xe2\x9c\x85\x1b[0m shared.js minified (%d \u2192 %d bytes)', shared.length, r.code.length);
     }
+
+    // Minify firebase.js (assets subdirectory)
+    await minifyAsset('firebase.js');
 
     // Minify HTML
     console.log('\n\x1b[33m3/4\x1b[0m Minifying HTML...');
