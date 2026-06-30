@@ -220,6 +220,7 @@
     const p = new URLSearchParams(location.search).get('auth');
     if (p === 'login')    { setTimeout(() => typeof openPage === 'function' && openPage('login'),    300); }
     if (p === 'register') { setTimeout(() => typeof openPage === 'function' && openPage('register'), 300); }
+    if (p === 'teacher')  { setTimeout(() => typeof openPage === 'function' && openPage('teacher-login'), 300); }
   }
 
   /* ── Auth nav update (called by Firebase module on each page) */
