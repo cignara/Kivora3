@@ -53,10 +53,8 @@
     provider.setCustomParameters({ prompt: 'select_account' });
     return ns.auth.signInWithPopup(provider).then(function(result) {
       try { localStorage.setItem('kivora_firebase_uid', result.user.uid); } catch(e) {}
-      // Redirect to parent dashboard (or login if no children)
-      var kids = JSON.parse(localStorage.getItem('kivora_children') || '[]');
-      var page = kids.length > 0 ? 'parent-dashboard' : 'login';
-      if (typeof openPage === 'function') { setTimeout(function() { openPage(page); }, 50); }
+      // Always land on the parent dashboard — it shows "No children added yet" itself when empty
+      if (typeof openPage === 'function') { setTimeout(function() { openPage('parent-dashboard'); }, 50); }
       return result;
     });
   };
@@ -65,9 +63,7 @@
     if (!ns.auth) return Promise.reject('Firebase not available');
     return ns.auth.signInWithEmailAndPassword(email, password).then(function(result) {
       try { localStorage.setItem('kivora_firebase_uid', result.user.uid); } catch(e) {}
-      var kids = JSON.parse(localStorage.getItem('kivora_children') || '[]');
-      var page = kids.length > 0 ? 'parent-dashboard' : 'login';
-      if (typeof openPage === 'function') { setTimeout(function() { openPage(page); }, 50); }
+      if (typeof openPage === 'function') { setTimeout(function() { openPage('parent-dashboard'); }, 50); }
       return result;
     });
   };
@@ -156,6 +152,7 @@
           if (!merged.find(function(x) { return x.id === c.id; })) merged.push(c);
         });
         localStorage.setItem('kivora_children', JSON.stringify(merged));
+        if (typeof showParentDashboard === 'function') showParentDashboard();
       });
       ns.loadProgress('all').then(function() {
         // Progress is loaded per-child in activities.js
