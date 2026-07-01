@@ -3176,10 +3176,20 @@ Mailing address: Kivora Learning, Colombo, Sri Lanka.</p>
       </div>
 
       <!-- Google Sign-In button -->
-      <button onclick="kivoraFirebase.signInWithGoogle().catch(function(e){ var el=document.getElementById('auth-error-msg'); if(el){el.textContent=e.message||'Google sign-in failed';el.style.display='block'} })"
-        id="googleSignInBtn"
+      <button id="googleSignInBtn" onclick="(function(btn){
+          if(btn.disabled) return;
+          btn.disabled=true; btn.textContent='Opening Google…';
+          var msg=document.getElementById('auth-error-msg'); if(msg) msg.style.display='none';
+          kivoraFirebase.signInWithGoogle().catch(function(e){
+            btn.disabled=false; btn.innerHTML='<span style=\"font-size:1.2rem\">G</span> Sign in with Google';
+            if(e&&e.code==='auth/cancelled-popup-request') return; // user opened twice — silently ignore
+            if(e&&e.code==='auth/popup-closed-by-user') return;   // user closed popup — silently ignore
+            var m=e&&e.message?e.message:'Google sign-in failed — please try again.';
+            if(msg){msg.textContent=m;msg.style.display='block';}
+          });
+        })(this)"
         style="width:100%;padding:12px;border-radius:14px;border:2px solid #e2e8f0;background:#fff;font-family:inherit;font-size:.9rem;font-weight:700;color:#1e293b;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s"
-        onmouseover="this.style.borderColor='#7C3AED'" onmouseout="this.style.borderColor='#e2e8f0'">
+        onmouseover="if(!this.disabled)this.style.borderColor='#7C3AED'" onmouseout="this.style.borderColor='#e2e8f0'">
         <span style="font-size:1.2rem">G</span> Sign in with Google
       </button>
 
@@ -3237,9 +3247,19 @@ Mailing address: Kivora Learning, Colombo, Sri Lanka.</p>
       <div id="reg-error-msg" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:10px 14px;font-size:.85rem;font-weight:700;color:#dc2626;margin-bottom:14px;text-align:center"></div>
 
       <!-- Google Sign-Up -->
-      <button onclick="kivoraFirebase.signInWithGoogle().catch(function(e){ var el=document.getElementById('reg-error-msg'); if(el){el.textContent=e.message||'Google sign-up failed';el.style.display='block'} })"
+      <button id="googleSignUpBtn" onclick="(function(btn){
+          if(btn.disabled) return;
+          btn.disabled=true; btn.textContent='Opening Google…';
+          var msg=document.getElementById('reg-error-msg'); if(msg) msg.style.display='none';
+          kivoraFirebase.signInWithGoogle().catch(function(e){
+            btn.disabled=false; btn.innerHTML='<span style=\"font-size:1.2rem\">G</span> Sign up with Google';
+            if(e&&(e.code==='auth/cancelled-popup-request'||e.code==='auth/popup-closed-by-user')) return;
+            var m=e&&e.message?e.message:'Google sign-up failed — please try again.';
+            if(msg){msg.textContent=m;msg.style.display='block';}
+          });
+        })(this)"
         style="width:100%;padding:12px;border-radius:14px;border:2px solid #e2e8f0;background:#fff;font-family:inherit;font-size:.9rem;font-weight:700;color:#1e293b;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s;margin-bottom:16px"
-        onmouseover="this.style.borderColor='#7C3AED'" onmouseout="this.style.borderColor='#e2e8f0'">
+        onmouseover="if(!this.disabled)this.style.borderColor='#7C3AED'" onmouseout="this.style.borderColor='#e2e8f0'">
         <span style="font-size:1.2rem">G</span> Sign up with Google
       </button>
 

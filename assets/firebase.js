@@ -49,13 +49,22 @@
     if (isFileProtocol()) {
       return Promise.reject(new Error('Google sign-in requires a web server. Serve via http:// (e.g. "npx serve" or "npm run build" then upload to GitHub Pages).'));
     }
+    // If a popup is already in flight, cancel it first to avoid the duplicate-popup error
+    if (ns._googlePopupPending) {
+      return Promise.reject({ code: 'auth/cancelled-popup-request', message: 'Already opening Google sign-in' });
+    }
+    ns._googlePopupPending = true;
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     return ns.auth.signInWithPopup(provider).then(function(result) {
+      ns._googlePopupPending = false;
       try { localStorage.setItem('kivora_firebase_uid', result.user.uid); } catch(e) {}
       _syncLocalToCloud(result.user.uid);
       if (typeof openPage === 'function') { setTimeout(function() { openPage('parent-dashboard'); }, 50); }
       return result;
+    }).catch(function(e) {
+      ns._googlePopupPending = false;
+      throw e;
     });
   };
 
