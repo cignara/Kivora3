@@ -6831,6 +6831,12 @@ function showReward(act){
   const rwSubEl=document.getElementById('rwSub'); if(rwSubEl)rwSubEl.textContent=`${act.title} — completed! 🎉`;
   document.getElementById('rewardOverlay').classList.add('show');
   updateCountBadges();
+  // Show save-progress prompt if no parent account linked
+  const savePrompt = document.getElementById('rewardSavePrompt');
+  if (savePrompt) {
+    const hasParent = !!(localStorage.getItem('kivora_firebase_uid'));
+    savePrompt.style.display = hasParent ? 'none' : 'block';
+  }
 }
 
 function closeReward(){
